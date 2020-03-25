@@ -178,6 +178,7 @@ class Admin
 		$loaiPhi_list = Model_ChungTuLoaiPhi::getDatafromForm($chungTu->id);
 
 		foreach ($loaiPhi_list as $record) {
+			$record["idUser"] = $_SESSION["admin_login"]["idUser"];
 			$chungTuLoaiPhi = new Model_ChungTuLoaiPhi();
 			if( ! $chungTuLoaiPhi->createNew($record) ) {
 				$message = "<b style='color:red'>".Dbvs2::$stm->errorInfo()[2]."</b> <br>";
@@ -214,32 +215,29 @@ class Admin
 
 		// Them cac loai phi moi tick
 		$PhiMoi_list = Model_ChungTuLoaiPhi::getDatafromForm($chungTu->id);
+
 		$PhiCu_list  = Model_ChungTuLoaiPhi::getByChungTu($chungTu->id);
 
 		$maLoaiPhiCu_list  = array_column($PhiCu_list, "maLoaiPhi");
-
+		// echo "<pre>";print_r($PhiMoi_list); exit();
 		foreach ($PhiMoi_list as $record) {
 			// Them cac loai phi moi tick
 			if( !in_array($record["maLoaiPhi"] , $maLoaiPhiCu_list) ){
+				$record["idUser"] = $_SESSION["admin_login"]["idUser"];
 				$phi = new Model_ChungTuLoaiPhi();
 				if( !$phi->createNew($record) ) {
 					$message = "<b style='color:red'>".Dbvs2::$stm->errorInfo()[2]."</b> <br>";
 					throw new Exception($message);
 				}
 
-				// if( !$phi->audit( array("gia" => $record["gia"]) ) ) {
-				// 	$message = "<b style='color:red'>".Dbvs2::$stm->errorInfo()[2]."</b> <br>";
-				// 	throw new Exception($message);
-				// }
-
 			} else { // Cac loai phi cu
 				$phi = new Model_ChungTuLoaiPhi($chungTu->id,$record["maLoaiPhi"]);
 				
 				// Them gia
-				// if( !$phi->audit( array("gia" => $record["gia"]) ) ) {
-				// 	$message = "<b style='color:red'>".Dbvs2::$stm->errorInfo()[2]."</b> <br>";
-				// 	throw new Exception($message);
-				// }
+				if( !$phi->audit( array("gia" => $record["gia"]) ) ) {
+					$message = "<b style='color:red'>".Dbvs2::$stm->errorInfo()[2]."</b> <br>";
+					throw new Exception($message);
+				}
 			} 
 				
 			

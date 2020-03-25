@@ -39,11 +39,12 @@ class Model_ChungTuLoaiPhi extends Table
 
 	function audit($data){
 		//
-		$data["maChungTu"] = $this->maChungTu;
-		$data["maLoaiPhi"] = $this->maLoaiPhi;
-
+		$condition  = [
+		    'maChungTu' => $this->maChungTu,
+		    'maLoaiPhi' => $this->maLoaiPhi
+		];
 		// 
-		if( !$this->update($data) ) return false;
+		if( !$this->update($condition,$data) ) return false;
 
 		//
 		return true;
@@ -78,10 +79,11 @@ class Model_ChungTuLoaiPhi extends Table
 
 		$phi_list = $_POST["maloaiphi"];
 		$gia_list = isset($_POST["gia"]) ? $_POST["gia"]: null;
+		// echo "<pre>";print_r($phi_list);print_r($gia_list); exit();
 		if( empty($phi_list) ) return $dataArray;
-		// $gia_list = postIndex('gia');
+
 		for ($i = 0; $i < count($phi_list); $i++){
-			$dataArray[$i] = array("maChungTu"=>$maChungTu,"maLoaiPhi"=>$phi_list[$i],"idUser"=>$_SESSION["admin_login"]["idUser"],"gia" => $gia_list[$i]);
+			$dataArray[$i] = array("maChungTu"=>$maChungTu,"maLoaiPhi"=>$phi_list[$i],"gia" => $gia_list[$phi_list[$i]]);
 		}
 		return $dataArray;
 		

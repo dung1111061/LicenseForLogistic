@@ -81,8 +81,9 @@ abstract class Table extends Dbvs2
     
 
   		$result = self::updateQuery($sql,$values);
-	    if($result == 1) return true;
-	    else return false;
+  		// 23/3/2020 verify result of updateQuery
+	    if( Dbvs2::$stm->errorInfo()[2] ) return false;
+	    return true;
   	}
 
   	// inject data from _POST to properties of object

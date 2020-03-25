@@ -88,21 +88,26 @@ foreach ($transporterList as $transporter) {
 					
 					foreach($data as $k=>$r)
 					{
-						$checked = in_array($r['maLoaiPhi'], array_column($phi, "maLoaiPhi") )? "checked": null;
+						// $checked = in_array($r['maLoaiPhi'], array_column($phi, "maLoaiPhi") )? "checked": null;
 
-						$value = $checked ? array_column($phi, "gia")[0]: null;
+						// $value = $checked ? array_column($phi, "gia")[0]: null;
+
+						$index = array_search($r['maLoaiPhi'], array_column($phi, "maLoaiPhi") );
+						$checked = $index !== false ? "checked": null;
+						$value = $index !== false ? array_column($phi, "gia")[$index]: null;
+						
 						?>
 
 					<tr>
 						<td><?php echo $k+1 ?></td>
 						<td>
-							<input type="checkbox" class="form-control" name="maloaiphi[]" <?=$checked?>  value="<?php echo $r['maLoaiPhi'] ?>">
+							<input type="checkbox" class="form-control phi" name="maloaiphi[]" <?=$checked?>  value="<?php echo $r['maLoaiPhi'] ?>">
 						</td>
 						<td>
 							<?php echo $r['tenLoaiPhi'] ?>
 						</td>
 						<td>
-							<input type="number" class="form-control" name="value[]"  value="<?=$value?>">
+							<input type="number" class="form-control" name="gia[<?=$r['maLoaiPhi']?>]"  value="<?=$value?>">
 						</td>
 	
 					</tr>
@@ -119,3 +124,7 @@ foreach ($transporterList as $transporter) {
 				</table>
 			</div>
 		</div>
+
+<script>
+	
+</script>
